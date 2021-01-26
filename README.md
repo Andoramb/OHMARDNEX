@@ -67,8 +67,8 @@ Read the data from your Laptop/PC -> send it to an Arduino that simply forwards 
    - Select the correct COM port
    - Select baud rate (usually 115200)
    - Choose update rate - works fine with 2000msec
-   
-### Want to contribuite?
+    
+### Want to contribute?
 Check out the resources and the project folder! Here are some tips for future improvements:
 - [x] Feature to minimize the app to the taskbar
 - [x] Feature to select which data has to be sent to the display
