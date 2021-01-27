@@ -5,6 +5,11 @@ Welcome to my little side project:
 
 We're going to make a simple hardware and sensor monitoring tool that looks great as a built-in piece of hardware or as a gadget on your desktop!
 
+<br><img src="3-Res/Images/PC_Case2.jpg" width=320>
+<img src="3-Res/Images/PC_Case1.jpg" width=320>
+<br><img src="3-Res/Images/MainPage.png" width=320>
+<img src="3-Res/Images/Status1.jpg" width=320>
+
 ### Working principle:
 Read the data from your Laptop/PC -> send it to an Arduino that simply forwards it to a Nextion display!
 
@@ -62,8 +67,8 @@ Read the data from your Laptop/PC -> send it to an Arduino that simply forwards 
    - Select the correct COM port
    - Select baud rate (usually 115200)
    - Choose update rate - works fine with 2000msec
-   
-### Want to contribuite?
+    
+### Want to contribute?
 Check out the resources and the project folder! Here are some tips for future improvements:
 - [x] Feature to minimize the app to the taskbar
 - [x] Feature to select which data has to be sent to the display
