@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 
 using OpenHardwareMonitor.Hardware;
-namespace Arduino_PC_Monitor
+namespace OHMARDNEX
 {
     public partial class Form1 : Form
     {
@@ -562,7 +562,7 @@ namespace Arduino_PC_Monitor
             selectedPort.Write(bytesToSend, 0, bytesToSend.Length);
         }
         
-        void Send(string s)
+        void SendTxt(string s)
         {
 
             byte[] messageBytes = Encoding.ASCII.GetBytes(s);
@@ -576,7 +576,7 @@ namespace Arduino_PC_Monitor
             selectedPort.Write(bytesToSend, 0, bytesToSend.Length);
         }
         
-        void Sendtemp(string s)  // Separate functino called for the degree symbol
+        void SendTemp(string s)  // Separate functino called for the degree symbol
         {
 
             byte[] messageBytes = Encoding.ASCII.GetBytes(s);
@@ -622,32 +622,32 @@ namespace Arduino_PC_Monitor
               
                 if (hardware.HardwareType.ToString().Contains("RAM") && cbRAMUsage.Checked)
                 {
-                    Send("info.raminfo.txt=\"" + hardware.Name.ToString());
+                    SendTxt("info.raminfo.txt=\"" + hardware.Name.ToString());
                 }
                 if (hardware.HardwareType.ToString().Contains("CPU") && cbCPULoad.Checked)
                 {
-                    Send("info.cpuinfo.txt=\"" + hardware.Name.ToString());
+                    SendTxt("info.cpuinfo.txt=\"" + hardware.Name.ToString());
                 }
                 if (hardware.HardwareType.ToString().Contains("Gpu") && cbGPULoad.Checked)
                 {
-                    Send("info.gpuinfo.txt=\"" + hardware.Name.ToString());
+                    SendTxt("info.gpuinfo.txt=\"" + hardware.Name.ToString());
                 }
                 if (hardware.HardwareType.ToString().Contains("HDD"))
                 {
                     if (hardware.Identifier.ToString().Contains("0") && cbHDD1.Checked)
                     {
-                        Send("info.hdd1info.txt=\"" + hardware.Name.ToString());
-                        Send("status2.hdd1txt.txt=\"" + hardware.Name.ToString());
+                        SendTxt("info.hdd1info.txt=\"" + hardware.Name.ToString());
+                        SendTxt("status2.hdd1txt.txt=\"" + hardware.Name.ToString());
                     }
                     else if (hardware.Identifier.ToString().Contains("1") && cbHDD2.Checked)
                     {
-                        Send("info.hdd2info.txt=\"" + hardware.Name.ToString());
-                        Send("status2.hdd2txt.txt=\"" + hardware.Name.ToString());
+                        SendTxt("info.hdd2info.txt=\"" + hardware.Name.ToString());
+                        SendTxt("status2.hdd2txt.txt=\"" + hardware.Name.ToString());
                     }
                 }
                 if (hardware.HardwareType.ToString().Contains("Mainboard"))
                 {
-                    Send("info.mbinfo.txt=\"" + hardware.Name.ToString());
+                    SendTxt("info.mbinfo.txt=\"" + hardware.Name.ToString());
                 }
 
             }
@@ -662,12 +662,12 @@ namespace Arduino_PC_Monitor
                     hardware.Update();
                     if (sensor.SensorType == SensorType.Temperature && sensor.Name.Contains("CPU Package") && cbCPUTemp.Checked)
                     {
-                        Send("status1.cputemp.val=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
-                        Sendtemp("status1.cputemptxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());  //quotes closed in the Sendtemp definition
+                        SendRaw("status1.cputemp.val=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
+                        SendTemp("status1.cputemptxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());  //quotes closed in the Sendtemp definition
 
                         if (sensor.Value.GetValueOrDefault() > 80)
                         {
-                            Send("sleep=0");
+                            SendRaw("sleep=0");
                         }
 
                         // System.Diagnostics.Debug.WriteLine("cputemp.val: " + sensor.Value.GetValueOrDefault());
@@ -675,14 +675,14 @@ namespace Arduino_PC_Monitor
 
                     if (sensor.SensorType == SensorType.Load && sensor.Name.Contains("CPU Total") && cbCPULoad.Checked)
                     {
-                        Send("status1.cpuload.pic=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
-                        Send("status1.cpuloadtxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString() + "%");
+                        SendRaw("status1.cpuload.pic=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
+                        SendTxt("status1.cpuloadtxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString() + "%");
                         // System.Diagnostics.Debug.WriteLine("cpuload.pic: " + sensor.Value.GetValueOrDefault());
                     }
 
                     if (sensor.SensorType == SensorType.Power && sensor.Name.Contains("CPU Package") && cbCPUPower.Checked)
                     {
-                        Send("status2.cpupowertxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString() + " W");
+                        SendTxt("status2.cpupowertxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString() + " W");
 
                     }
                 }
@@ -698,36 +698,36 @@ namespace Arduino_PC_Monitor
 
                         if (sensor.SensorType == SensorType.Temperature && sensor.Name.Contains("GPU Core") && cbGPUTemp.Checked)
                         {
-                            Send("status1.gputemp.val=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
-                            Sendtemp("status1.gputemptxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString()); //quotes closed in the Sendtemp definition
+                            SendRaw("status1.gputemp.val=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
+                            SendTemp("status1.gputemptxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString()); //quotes closed in the Sendtemp definition
 
                             if (sensor.Value.GetValueOrDefault() > 80)
-                                Send("sleep=0");
+                                SendRaw("sleep=0");
 
                             // System.Diagnostics.Debug.WriteLine("gputemp.val: " + sensor.Value.GetValueOrDefault());
                         }
 
                         if (sensor.SensorType == SensorType.Load && sensor.Name.Contains("GPU Core") && cbGPULoad.Checked)
                         {
-                            Send("status1.gpuload.pic=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
-                            Send("status1.gpuloadtxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString() + "%");
+                            SendRaw("status1.gpuload.pic=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
+                            SendTxt("status1.gpuloadtxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString() + "%");
                             // System.Diagnostics.Debug.WriteLine("gpuload.val: " + sensor.Value.GetValueOrDefault());
                         }
 
                         if (sensor.SensorType == SensorType.Load && sensor.Name.Contains("GPU Memory") && cbGPURam.Checked)
                         {
-                            Send("status1.gpuram.pic=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
-                            Send("status1.gpuramtxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString() + "%");
+                            SendRaw("status1.gpuram.pic=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
+                            SendTxt("status1.gpuramtxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString() + "%");
 
                             // System.Diagnostics.Debug.WriteLine("gputemp.val: " + sensor.Value.GetValueOrDefault());
                         }
                         if (sensor.SensorType == SensorType.Fan && cbGPUTemp.Checked)
                         {
-                            Send("status2.gpufantxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString() + " RPM");
+                            SendTxt("status2.gpufantxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString() + " RPM");
                         }
                         if (sensor.SensorType == SensorType.Control && sensor.Name.Contains("Fan") && cbGPUTemp.Checked)
                         {
-                            Send("status2.gpufan.pic=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
+                            SendRaw("status2.gpufan.pic=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
                         }
                     }
                 }
@@ -740,36 +740,36 @@ namespace Arduino_PC_Monitor
                         hardware.Update();
                         if (sensor.SensorType == SensorType.Temperature && sensor.Name.Contains("GPU Core") && cbGPUTemp.Checked)
                         {
-                            Send("status1.gputemp.val=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
-                            Sendtemp("status1.gputemptxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString()); //quotes closed in the Sendtemp definition
+                            SendRaw("status1.gputemp.val=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
+                            SendTemp("status1.gputemptxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString()); //quotes closed in the SendTemp definition
 
                             if (sensor.Value.GetValueOrDefault() > 80)
-                                Send("sleep=0");
+                                SendRaw("sleep=0");
 
                             // System.Diagnostics.Debug.WriteLine("gputemp.val: " + sensor.Value.GetValueOrDefault());
                         }
 
                         if (sensor.SensorType == SensorType.Load && sensor.Name.Contains("GPU Core") && cbGPULoad.Checked)
                         {
-                            Send("status1.gpuload.pic=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
-                            Send("status1.gpuloadtxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString() + "%");
+                            SendRaw("status1.gpuload.pic=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
+                            SendTxt("status1.gpuloadtxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString() + "%");
                             // System.Diagnostics.Debug.WriteLine("gpuload.val: " + sensor.Value.GetValueOrDefault());
                         }
 
                         if (sensor.SensorType == SensorType.Load && sensor.Name.Contains("GPU Memory") && cbGPURam.Checked)
                         {
-                            Send("status2.gpupower.pic=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
-                            Send("status2.gpupowertxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString() + " W");
+                            SendRaw("status2.gpupower.pic=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
+                            SendTxt("status2.gpupowertxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString() + " W");
                             // System.Diagnostics.Debug.WriteLine("gpupower.pic: " + sensor.Value.GetValueOrDefault());
 
                         }
                         if (sensor.SensorType == SensorType.Fan && cbGPUTemp.Checked)
                         {
-                            Send("status2.gpufantxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString() + " RPM");
+                            SendTxt("status2.gpufantxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString() + " RPM");
                         }
                         if (sensor.SensorType == SensorType.Control && sensor.Name.Contains("Fan") && cbGPUTemp.Checked)
                         {
-                            Send("status2.gpufan.pic=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
+                            SendRaw("status2.gpufan.pic=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
                         }
                     }
                 }
@@ -781,8 +781,8 @@ namespace Arduino_PC_Monitor
                         hardware.Update();
                         if (sensor.SensorType == SensorType.Load && sensor.Name.Contains("Memory") && cbRAMUsage.Checked)
                         {
-                            Send("status1.ramload.pic=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
-                            Send("status1.ramloadtxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString() + "%");
+                            SendRaw("status1.ramload.pic=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
+                            SendTxt("status1.ramloadtxt.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString() + "%");
                             // System.Diagnostics.Debug.WriteLine("ramload.pic: " + sensor.Value.GetValueOrDefault());
 
                         }
@@ -798,22 +798,22 @@ namespace Arduino_PC_Monitor
                         {
                             if (sensor.Hardware.Identifier.ToString().Contains("0") && cbHDD1.Checked)
                             {
-                                Send("status2.hdd1.val=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
-                                Send("status2.hdd1size.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString() + "%");
+                                SendRaw("status2.hdd1.val=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
+                                SendTxt("status2.hdd1size.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString() + "%");
                             }
 
                             if (sensor.Hardware.Identifier.ToString().Contains("1") && cbHDD2.Checked)
                             {
-                                Send("status2.hdd2.val=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
-                                Send("status2.hdd2size.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString() + "%");
+                                SendRaw("status2.hdd2.val=" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString());
+                                SendTxt("status2.hdd2size.txt=\"" + Convert.ToInt32(sensor.Value.GetValueOrDefault()).ToString() + "%");
                             }
                         }
                     }
                 }
             }
 
-            Send("screensaver.time.txt=\"" + DateTime.Now.Hour.ToString() + ":" + DateTime.Now.Minute.ToString());
-            Send("screensaver.date.txt=\"" + DateTime.Today.ToString("yyyy MMMM dd"));
+            SendTxt("screensaver.time.txt=\"" + DateTime.Now.Hour.ToString() + ":" + DateTime.Now.Minute.ToString());
+            SendTxt("screensaver.date.txt=\"" + DateTime.Today.ToString("yyyy MMMM dd"));
         }
 
         private Label label6;
