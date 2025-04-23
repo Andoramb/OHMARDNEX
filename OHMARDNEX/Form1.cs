@@ -51,6 +51,7 @@ namespace OHMARDNEX
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem restoreToolStripMenuItem;
         private ToolStripMenuItem exitToolStripMenuItem;
+        private CheckBox cbStartWithWindows;
         public Form1()
         {
             InitializeComponent();
@@ -423,10 +424,24 @@ namespace OHMARDNEX
             this.label6.Text = "Created by Andor Ambarus";
             this.label6.Click += new System.EventHandler(this.label6_Click);
             // 
+            // cbStartWithWindows
+            // 
+            this.cbStartWithWindows = new System.Windows.Forms.CheckBox();
+            this.cbStartWithWindows.AutoSize = true;
+            this.cbStartWithWindows.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cbStartWithWindows.Location = new System.Drawing.Point(12, 260);
+            this.cbStartWithWindows.Name = "cbStartWithWindows";
+            this.cbStartWithWindows.Size = new System.Drawing.Size(225, 26);
+            this.cbStartWithWindows.TabIndex = 20;
+            this.cbStartWithWindows.Text = "Start with Windows";
+            this.cbStartWithWindows.UseVisualStyleBackColor = true;
+            this.cbStartWithWindows.CheckedChanged += new System.EventHandler(this.cbStartWithWindows_CheckedChanged);
+            // 
             // Form1
             // 
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(561, 326);
+            this.Controls.Add(this.cbStartWithWindows);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.cbHDD2);
@@ -494,8 +509,16 @@ namespace OHMARDNEX
             this.ShowInTaskbar = true;
             notifyIcon1.Visible = true;
             this.statusStrip1.Text = "Created by Andor Ambarus - 2021";
+            
+            // Check if the application is set to start with Windows and update checkbox state
+            cbStartWithWindows.Checked = Program.IsStartupEnabled();
         }
-
+        
+        private void cbStartWithWindows_CheckedChanged(object sender, EventArgs e)
+        {
+            // Update the Windows startup registry based on checkbox state
+            Program.SetStartup(cbStartWithWindows.Checked);
+        }
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
